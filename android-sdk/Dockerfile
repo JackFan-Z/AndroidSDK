@@ -8,7 +8,7 @@ FROM ubuntu:16.04
 
 # Author
 # ---------------------------------------------------------------------- #
-LABEL maintainer "thyrlian@gmail.com"
+LABEL maintainer "fanjack@gmail.com"
 
 # support multiarch: i386 architecture
 # install Java
@@ -18,7 +18,7 @@ RUN dpkg --add-architecture i386 && \
     apt-get update -y && \
     apt-get install -y libncurses5:i386 libc6:i386 libstdc++6:i386 lib32gcc1 lib32ncurses5 lib32z1 zlib1g:i386 && \
     apt-get install -y --no-install-recommends openjdk-8-jdk && \
-    apt-get install -y git wget zip && \
+    apt-get install -y git wget zip build-essential && \
     apt-get install -y qt5-default
 
 # download and install Gradle
@@ -42,6 +42,16 @@ RUN mkdir -p /opt/android-sdk && cd /opt/android-sdk && \
     wget -q https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip && \
     unzip *tools*linux*.zip && \
     rm *tools*linux*.zip
+
+# Android NDK
+ENV ANDROID_NDK_VERSION r14b
+ENV ANDROID_NDK_URL http://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip
+RUN curl -L "${ANDROID_NDK_URL}" -o android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip \
+  && unzip android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip -d ${SDK_HOME}  \
+  && rm -rf android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip
+ENV ANDROID_NDK_HOME ${SDK_HOME}/android-ndk-${ANDROID_NDK_VERSION}
+ENV PATH ${ANDROID_NDK_HOME}:$PATH
+RUN chmod u+x ${ANDROID_NDK_HOME}/ -R
 
 # set the environment variables
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
