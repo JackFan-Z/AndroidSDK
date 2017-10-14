@@ -96,4 +96,7 @@ RUN apt-get update -y && \
     done && \
     (rm /tmp/*.pub 2> /dev/null || true)
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+ADD emulator_start.sh /opt/
+
 CMD ["/usr/bin/supervisord"]
