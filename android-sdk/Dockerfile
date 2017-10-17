@@ -99,4 +99,12 @@ ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 ADD emulator_start.sh /opt/
 
+# Workaround to download gradle dependency cache
+# It was discussed here, but none of them works
+# https://stackoverflow.com/questions/34162120/gitlab-ci-gradle-dependency-cache
+RUN cd /opt && \
+    git clone https://github.com/JackFan-Z/hello-jni.git && \
+    cd hello-jni && \
+    ./gradlew tasks
+
 CMD ["/usr/bin/supervisord"]
