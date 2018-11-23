@@ -97,14 +97,28 @@ RUN apt-get update -y && \
     (rm /tmp/*.pub 2> /dev/null || true)
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# GitLab injects the username as ENV-variable which will crash a gradle-build.
+# Workaround by adding unicode-support.
+# See
+# https://github.com/gradle/gradle/issues/3117#issuecomment-336192694
+# https://github.com/tianon/docker-brew-debian/issues/45
+RUN apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.UTF-8
+
 ADD emulator_start.sh /opt/
 ADD emulator_x86_64_start.sh /opt/
+
 # Workaround to download gradle dependency cache
 # It was discussed here, but none of them works
 # https://stackoverflow.com/questions/34162120/gitlab-ci-gradle-dependency-cache
 RUN cd /opt && \
     git clone https://github.com/JackFan-Z/hello-jni.git && \
     cd hello-jni && \
-    ./gradlew tasks
+    git fetch --all && \
+    git checkout 3294815e37a6ecd5eeafd78fbd69906b594c1985 && \
+    ./gradlew assembleDebug && ./gradlew clean && \
+    git checkout br_test_ci_runner && \
+    ./gradlew assembleDebug && ./gradlew clean
 
 CMD ["/usr/bin/supervisord"]
