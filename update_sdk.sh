@@ -2,6 +2,9 @@ ANDROID_TARGET_SDK="platforms;android-27"
 ANDROID_BUILD_TOOLS="build-tools;27.0.3"
 sudo sdk/tools/bin/sdkmanager "platform-tools" "${ANDROID_TARGET_SDK}" "${ANDROID_BUILD_TOOLS}"
 
+ANDROID_BUILD_TOOLS="build-tools;28.0.3"
+sudo sdk/tools/bin/sdkmanager "platform-tools" "${ANDROID_BUILD_TOOLS}"
+
 ANDROID_TARGET_SDK="platforms;android-25"
 ANDROID_BUILD_TOOLS="build-tools;25.0.3"
 ANDROID_SDK_TOOLS="25.2.3"
