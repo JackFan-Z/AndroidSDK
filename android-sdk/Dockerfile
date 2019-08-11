@@ -112,13 +112,13 @@ ADD emulator_x86_64_start.sh /opt/
 # Workaround to download gradle dependency cache
 # It was discussed here, but none of them works
 # https://stackoverflow.com/questions/34162120/gitlab-ci-gradle-dependency-cache
-RUN cd /opt && \
-    git clone https://github.com/JackFan-Z/hello-jni.git && \
-    cd hello-jni && \
-    git fetch --all && \
-    git checkout 3294815e37a6ecd5eeafd78fbd69906b594c1985 && \
-    ./gradlew assembleDebug && ./gradlew clean && \
-    git checkout br_test_ci_runner && \
-    ./gradlew assembleDebug && ./gradlew clean
+#RUN cd /opt && \
+#    git clone https://github.com/JackFan-Z/hello-jni.git && \
+#    cd hello-jni && \
+#    git fetch --all && \
+#    git checkout 3294815e37a6ecd5eeafd78fbd69906b594c1985 && \
+#    ./gradlew assembleDebug && ./gradlew clean && \
+#    git checkout br_test_ci_runner && \
+#    ./gradlew assembleDebug && ./gradlew clean
 
-CMD ["/usr/bin/supervisord"]
+#CMD ["/usr/bin/supervisord"]
